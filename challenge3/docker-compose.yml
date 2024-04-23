@@ -1,0 +1,27 @@
+version: '3'
+services:
+  nginx:
+    build: ./nginx
+    image: nginx:latest
+    ports:
+      - "8080:80"
+    depends_on:
+      - node-service
+  node-service:
+    build: ./api
+    
+    environment:
+      - DB_HOST=${DB_HOST}
+      - DB_USERNAME=${DB_USERNAME}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_DATABASE=${DB_DATABASE}
+      - HOSTNAME=${HOSTNAME}
+    depends_on:
+      - db
+  db: 
+    build: ./db
+    image: mysql:latest
+    environment:
+      - MYSQL_ROOT_PASSWORD=${DB_PASSWORD}
+      - MYSQL_DATABASE=${DB_DATABASE}
+    
